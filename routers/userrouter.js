@@ -4,7 +4,7 @@ const {findProduct,createnew,updateProduct,deleteProduct,search} = require("../c
 const userRouter = express.Router()
 
 userRouter.get("/products/search",async(req,res,next)=>{
-    const searched = await search("p")
+    const searched = await search.sanitize((req.query.product))
     res.status(200).json({status:"success",found:searched})
 })
 userRouter.get("/products/find",async (req,res,next)=>{
