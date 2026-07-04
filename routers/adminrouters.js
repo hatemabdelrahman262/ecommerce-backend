@@ -1,11 +1,14 @@
 const express = require("express")
 const sanitize = require("mongo-sanitize")
-const {findProduct,createnew,updateProduct,deleteProduct,search} = require("../controllers/products")
+const {findProduct,createnew,updateProduct,deleteProduct,search,searchByName} = require("../controllers/products")
 const adminRouter = express.Router()
-
+adminRouter.get("/products/searchByName",async(req,res,next)=>{
+    const searched = await searchByName(req.query.product)
+    res.status(200).json({found:searched})
+})
 adminRouter.get("/products/search",async(req,res,next)=>{
-    const searched = await search("p")
-    res.status(200).json({status:"success",found:searched})
+    const searched = await search(req.query.product)
+    res.status(200).json({found:searched})
 })
 adminRouter.get("/products/find",async (req,res,next)=>{
     try{
