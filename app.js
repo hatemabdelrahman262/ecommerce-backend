@@ -1,3 +1,9 @@
+//run server then go route:http://localhost:3000/admin/products for the inter face 
+// gently asks you to use the admin route not the user route bc it was not tested 
+// port and mongo uri were set on default to run on port or 3000 or port:27017
+
+
+
 const {PORT,MONGO_URI} = require("./config.js")
 const path = require("path")
 const express = require("express")
