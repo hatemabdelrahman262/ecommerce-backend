@@ -2,14 +2,13 @@ const search = document.getElementById("productSearch");
 const searchDiv = document.querySelector(".searchDiv")
 search.addEventListener("input", async (e) => {
     const query = e.target.value;
-    if(query !== ""){
-        const response = await fetch(`/admin/products/searchByName?product=${String("^"+query)}`);
+    if(query.trim() !== ""){
+        const response = await fetch(`/admin/products/searchByName?product=${String(query)}`);
         const products = await response.json();
+        console.log(products)
     
         if(products.found[0] !== undefined){
-            console.log(products.found[0]);
-            console.log(products.found[0].name);
-            searchChild(products.found[0].name);
+            searchChild(products);
     }}else if(e.target.value.trim() == ""){
         console.log("rm")
         while (searchDiv.childElementCount>1) {
@@ -23,16 +22,28 @@ search.addEventListener("input", async (e) => {
 
 function searchChild(products){
     // searchDiv.removeChild("*")
-    console.log(products)
-    const child = document.createElement("button");
-    child.innerHTML=`<button onclick="searchButton(child)">${products}</button>`
-    child.addEventListener("click",()=>{searchButton(products)})
-    child.textContent =(products);
+    console.log(products.found.length)
+    for(let i =0;i<products.found.length;i++){
+        let product = products.found[i].name
+        const child = document.createElement("button");
+    child.innerHTML=`<button onclick="searchButton(child)">${product}</button>`
+    child.addEventListener("click",()=>{searchButton(product.trim())})
+    child.textContent =(product);
     const br = document.createElement("br");
-    if(child.textContent !== ""){
-        searchDiv.appendChild(child)
-        searchDiv.appendChild(br)
+    // if(child.textContent !== "" && !searchDiv.contains(child)){
+    //     searchDiv.append(child)
+    //     searchDiv.appendChild(br)
+    // }
+    const exists = [...searchDiv.children].some(
+    element => element.textContent === child.textContent
+);
+
+if (child.textContent.trim !== "" && !exists) {
+    searchDiv.appendChild(child);
+    searchDiv.appendChild(br);
+}
     }
+    
     
 }
 async function searchButton(product){
