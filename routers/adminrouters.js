@@ -1,6 +1,8 @@
 const express = require("express")
 const sanitize = require("mongo-sanitize")
 const {findProduct,createnew,updateProduct,deleteProduct,search,searchByName} = require("../controllers/products")
+const {getCart,add,searchCart} = require("../controllers/cart")
+const product = require("../models/productmodel")
 const adminRouter = express.Router()
 adminRouter.get("/products/searchByName",async(req,res,next)=>{
     const searched = await searchByName(req.query.product)
@@ -37,6 +39,32 @@ adminRouter.post("/products/new",async (req,res,next)=>{
     try{
         const newProduct =await createnew("tablet",10000)
         res.status(201).json({status:"success",productcreated:newProduct})
+    }catch(err){
+        next(err)
+    }
+
+})
+
+///
+adminRouter.get("/cart",async (req,res,next)=>{
+    try{
+        const foundProduct =await getCart("6a5412c190a2c338d22b503d")
+        res.status(200).json({status:"success",productfound:foundProduct})
+    }catch(err){
+        next(err)
+}})
+adminRouter.get("/cart/find",async (req,res,next)=>{
+    try{
+        const foundProduct =await searchCart("6a5412c190a2c338d22b503d")
+        res.status(200).json({status:"success",productfound:foundProduct})
+    }catch(err){
+        next(err)
+}})
+adminRouter.post("/cart/new",async (req,res,next)=>{
+    try{
+        const product = await add("pc",2)
+        console.log("second:",product)
+        res.status(201).json({cart:"cart",product:product})
     }catch(err){
         next(err)
     }
