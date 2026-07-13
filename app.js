@@ -13,7 +13,7 @@ const userRouter = require("./routers/userrouter.js")
 const adminRouter = require("./routers/adminrouters.js")
 const {findProduct,createnew,updateProduct,deleteProduct,search} = require("./controllers/products.js")
 const { default: helmet } = require("helmet")
-const product = require("./models/productmodel.js")
+
 
 const app=express()
 app.use(express.json())
