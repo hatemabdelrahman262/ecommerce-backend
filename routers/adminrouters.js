@@ -3,7 +3,9 @@ const sanitize = require("mongo-sanitize")
 const {findProduct,createnew,updateProduct,deleteProduct,search,searchByName} = require("../controllers/products")
 const {getCart,add,searchCart} = require("../controllers/cart")
 const product = require("../models/productmodel")
+const seedDB = require("../seed")
 const adminRouter = express.Router()
+
 adminRouter.get("/products/searchByName",async(req,res,next)=>{
     const searched = await searchByName(req.query.product)
     res.status(200).json({found:searched})
@@ -19,7 +21,15 @@ adminRouter.get("/products/find",async (req,res,next)=>{
     }catch(err){
         next(err)
 }})
-
+adminRouter.put("/products/seed",(req,res,next)=>{
+    try {
+        seedDB()
+        res.status(200).json({seed:"activated"})
+    } catch (err) {
+        console.error("error:",err)
+    }
+    
+})
 adminRouter.put("/products/edit/:id",async (req,res,next)=>{
     try{
         const id =sanitize(req.params.id)
